@@ -1,0 +1,6 @@
+{
+  "name": "Little Sun Abyssinian",
+  "description": "Little Sun Abyssinian cattery app for raising Abyssinian cats, showing available and past kittens, showing pedigree details, and facilitating direct breeder contact.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

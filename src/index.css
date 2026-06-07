@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+
+@import "tailwindcss";
+
+@theme {
+  --color-surface: #020617; /* Slate 950 */
+  --color-on-surface: #f8fafc; /* Slate 50 */
+  --color-background: #020617;
+  --color-on-background: #f8fafc;
+  
+  --color-primary: #f59e0b; /* Amber 500 */
+  --color-primary-container: #d97706; /* Amber 600 */
+  --color-on-primary-container: #ffffff;
+  
+  --color-secondary: #f97316; /* Orange 500 */
+  --color-secondary-container: #ea580c; 
+  --color-on-secondary-container: #ffffff;
+  
+  --color-surface-container-lowest: rgba(255, 255, 255, 0.02);
+  --color-surface-container-low: rgba(255, 255, 255, 0.04);
+  --color-surface-container: rgba(255, 255, 255, 0.07);
+  --color-surface-container-high: rgba(255, 255, 255, 0.12);
+  --color-surface-container-highest: rgba(255, 255, 255, 0.2);
+  
+  --color-surface-dim: rgba(15, 23, 42, 0.6);
+  --color-on-surface-variant: #94a3b8; /* Slate 400 */
+  --color-surface-variant: rgba(255, 255, 255, 0.08);
+  --color-outline: rgba(255, 255, 255, 0.15);
+  --color-outline-variant: rgba(255, 255, 255, 0.08);
+
+  --radius-xxl: 1.5rem;
+  
+  --font-sans: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background-color: #020617;
+  font-family: "Source Sans 3", sans-serif;
+  -webkit-tap-highlight-color: transparent;
+  color: #f8fafc;
+  overflow-x: hidden;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+}
+
+/* Glassmorphism theme rules */
+.glass-card {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+.glass-card-interactive {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card-interactive:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.4);
+}
+
+.glass-badge {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+.glass-overlay {
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pedigree-line-v {
+  width: 2px;
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.3) 50%, transparent 50%);
+  background-size: 2px 8px;
+}
+
+.pedigree-line-h {
+  height: 2px;
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.3) 50%, transparent 50%);
+  background-size: 8px 2px;
+}
+
+.card-shadow {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.section-divider::before, .section-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin: 0 1rem;
+}
