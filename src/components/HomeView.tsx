@@ -33,7 +33,7 @@ export default function HomeView({ onNavigate, onOpenStandards }: HomeViewProps)
           <div className="absolute -inset-1 rounded-[30px] bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500 opacity-20 group-hover:opacity-40 blur-sm transition duration-500"></div>
           
           {/* Main Logo Container */}
-          <div className="relative w-full h-full rounded-[28px] overflow-hidden border border-white/12 bg-slate-900 group-hover:border-amber-400/30 transition-all duration-300 shadow-[0_8px_32px_rgba(0,0,0,0.5)] flex items-center justify-center">
+          <div className="relative w-full h-full rounded-[28px] overflow-hidden border border-white/12 bg-white group-hover:border-amber-400/30 transition-all duration-300 shadow-[0_8px_32px_rgba(0,0,0,0.5)] flex items-center justify-center">
             <img 
               alt="小太阳阿比猫屋 Logo" 
               className="w-full h-full object-cover scale-[1.2] select-none" 

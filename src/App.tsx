@@ -37,6 +37,33 @@ export default function App() {
   // Breeding standards explanation modal state
   const [showStandards, setShowStandards] = useState(false);
 
+  // Load state from back-end on mounts
+  useEffect(() => {
+    const syncWithBackend = async () => {
+      try {
+        const resKit = await fetch('/api/kittens');
+        if (resKit.ok) {
+          const remoteKittens = await resKit.json();
+          setKittens(remoteKittens);
+        }
+      } catch (err) {
+        console.warn('Backend server unreachable, running in offline sandbox mode:', err);
+      }
+
+      try {
+        const resRes = await fetch('/api/reservations');
+        if (resRes.ok) {
+          const remoteReservations = await resRes.json();
+          setReservations(remoteReservations);
+        }
+      } catch (err) {
+        console.warn('Could not sync reservations from server:', err);
+      }
+    };
+
+    syncWithBackend();
+  }, []);
+
   // Synchronise state with local storage
   useEffect(() => {
     localStorage.setItem('little_sun_active_tab', activeTab);
@@ -51,7 +78,28 @@ export default function App() {
   }, [reservations]);
 
   // Handle a new customer preorder submission
-  const onSubmitReservation = (newRes: Omit<Reservation, 'id' | 'createdAt'>) => {
+  const onSubmitReservation = async (newRes: Omit<Reservation, 'id' | 'createdAt'>) => {
+    try {
+      const response = await fetch('/api/reservations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newRes)
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success) {
+          // Sync with the primary server state response
+          setReservations(result.reservation ? [...reservations, result.reservation] : reservations);
+          setKittens(result.kittens);
+          return;
+        }
+      }
+    } catch (err) {
+      console.error('Error submitting reservation to backend, running offline fallback:', err);
+    }
+
+    // Offline / Unreachable Fallback flow:
     const reservation: Reservation = {
       ...newRes,
       id: Math.random().toString(36).substring(2, 9),
@@ -87,7 +135,7 @@ export default function App() {
       {/* Top Header App Bar */}
       <header className="flex justify-between items-center px-4 h-16 w-full z-40 bg-slate-950/45 backdrop-blur-xl fixed top-0 border-b border-white/8 shadow-[0_4px_30px_rgba(0,0,0,0.4)] max-w-lg mx-auto inset-x-0">
         <div className="flex items-center gap-2 select-none">
-          <div className="w-8 h-8 rounded-full overflow-hidden border border-amber-500/20 bg-slate-900 shadow-sm flex items-center justify-center">
+          <div className="w-8 h-8 rounded-full overflow-hidden border border-amber-500/20 bg-white shadow-sm flex items-center justify-center">
             <img 
               alt="Little Sun Abyssinian Logo"             className="w-full h-full object-cover scale-[1.2] select-none" 
               src={catteryLogo}

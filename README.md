@@ -1,20 +1,104 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# 小太阳阿比西尼亚猫屋 (Little Sun Abyssinian) - 前后端一体化系统
 
-# Run and deploy your AI Studio app
+这是一个专为“小太阳阿比西尼亚猫屋”精心打造的、高度流畅的一体化全栈 Web 应用。此项目采用目前最前沿的主流前端技术栈结合 Node.js Express 后端，实现了安全、稳定、流畅的前后端联通与数据持久化功能。
 
-This contains everything you need to run your app locally.
+---
 
-View your app in AI Studio: https://ai.studio/apps/d0fc61eb-8533-49e7-9945-59ac7fa046fa
+## 🌟 核心特色与功能模块
 
-## Run Locally
+1. **实时幼崽预订系统 (Kittens Reservation)**
+   - 动态获取后台待售幼崽数据（名字、性别、生辰、花色星座及价格）。
+   - 用户可直接在前端提交预订申请，系统自动生成唯一订单标识、当前时间戳并更新该猫咪状态为“已预订”。
+   - 支持后端接口和前端本地缓存（LocalStorage）的双重高可用备份机制，在后台故障时可自动降级至本地沙箱运行。
 
-**Prerequisites:**  Node.js
+2. **多维度种猫展示 (Siresh & Dams Showcase)**
+   - 支持猫舍优质种公（Kings）与种母（Queens）的详情查阅。
+   - 附带个性特征标签、星座、花色及高清实拍大图。
 
+3. **五代血统族谱树 (Pedigree Connection Tree)**
+   - 互动式的家族族谱，悬停或点击任意猫咪可动态高亮与其有血统关联的上下代亲属。
+   - 直观展示血统的纯正与有序繁育历史印证。
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+4. **家长咨询与反馈 (Consultation Ask Flow)**
+   - 设计了全套非侵入式联系渠道与在线咨询表单。
+   - 提交的问题和联系方式（微信/电话）不仅会被记入后端数据存储中，同时也同步储存于家长的历史追踪列表中。
+
+---
+
+## 🛠️ 后端架构设计 (Architecture & Persistence)
+
+本项目不依赖复杂的云端数据库，而是采用**轻量级文件持久化系统 (File-based DB)**。
+所有的实体数据（幼崽、预订订单、用户咨询记录）都会安全地存储在项目根目录的 `data-store.json` 文件中：
+- 第一次启动应用时，后端系统会自动检测并使用预定义的高品质阿比猫家庭数据（`src/data.ts`）进行种子数据初始化，自动生成 `data-store.json`。
+- 新增加的预约和咨询会被实时追加写入该文件，重启服务器数据依然保存完整，达到秒级的响应速度与零维护成本。
+
+---
+
+## 🚀 快速开始与本地开发 (Developer Setup)
+
+### 1. 前置条件
+
+请确保您的本地环境中已安装 [Node.js](https://nodejs.org/) (建议使用 v18+ 或 Lts 版本)。
+
+### 2. 克隆项目与安装依赖
+
+```bash
+# 安装所有的 NPM 开发与运行依赖项
+npm install
+```
+
+### 3. 运行本地开发调试
+
+使用极速的 `tsx` 和 Vite 关联中间件，一次命令同时启动前端与后端：
+
+```bash
+npm run dev
+```
+
+启动成功后，可在浏览器中打开：[http://localhost:3000](http://localhost:3000)
+
+### 4. 生产环境打包 (Build & Compile)
+
+该应用内置了定制化的工程构建工作流：
+- **前端资产打包**：使用 Vite 生产高压缩比的单页应用资产（放置在 `dist/` 文件夹下）。
+- **后端脚本编译**：使用 `esbuild` 快速将 backend 所有的依赖性代码和类型自动剥离打包成一个高效、自包含的 CommonJS 格式文件：`dist/server.cjs`。
+
+```bash
+# 执行打包构建
+npm run build
+```
+
+### 5. 启动生产服务器
+
+```bash
+# 启动自包含编译包并提供静态文件代理
+npm start
+```
+
+---
+
+## 📁 目录文件结构说明
+
+```text
+├── server.ts                 # Full-stack Node.js Express 后端入口，提供 RESTful API
+├── data-store.json           # 本地持久化数据库文件 (自动生成)
+├── src/
+│   ├── main.tsx              # React 与 Vite 前期接入主入口
+│   ├── App.tsx               # 主路由架构、状态分发、全局状态同步
+│   ├── data.ts               # 猫屋元数据（种猫、初始幼崽、销售历史）
+│   ├── types.ts              # TypeScript 全局数据接口规范
+│   ├── index.css             # 自定义 Tailwind 全局主题渲染配置及 CSS
+│   └── components/           # 拆分、解耦的模块化高阶展示视图
+│       ├── HomeView.tsx      # 猫舍理念、快速导览、招牌展示
+│       ├── BreedView.tsx     # 种公与种母名录
+│       ├── KittensView.tsx   # 当前在售幼崽预约购买表单
+│       ├── SoldView.tsx      # 历代已交付精品记录
+│       ├── PedigreeView.tsx  # 互动高亮血统五代族谱
+│       └── ContactView.tsx   # 咨询、微信扫码及物理定位导航
+```
+
+---
+
+## 🔒 开源协议与声明
+
+本项目旨在通过现代交互技术与一体化的全栈逻辑为繁育者和猫友提供顺畅的沟通桥梁。请尊重并维护健康、公开透明且阳光的繁育标准。

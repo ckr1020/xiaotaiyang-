@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Consultation } from '../types';
 
@@ -16,6 +16,22 @@ export default function ContactView() {
   });
   const [formSuccess, setFormSuccess] = useState(false);
 
+  // Load consultations from backend on mount
+  useEffect(() => {
+    const loadConsultations = async () => {
+      try {
+        const response = await fetch('/api/consultations');
+        if (response.ok) {
+          const data = await response.json();
+          setConsultations(data);
+        }
+      } catch (err) {
+        console.warn('Backend server unreachable, running consultations offline:', err);
+      }
+    };
+    loadConsultations();
+  }, []);
+
   // Copy to Clipboard
   const handleCopyWeChat = () => {
     navigator.clipboard.writeText('Abiabi2369521').then(() => {
@@ -29,8 +45,42 @@ export default function ContactView() {
   };
 
   // Submit consultation
-  const handleConsultationSubmit = (e: React.FormEvent) => {
+  const handleConsultationSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    const submissionData = {
+      subject: formInput.subject,
+      content: formInput.content,
+      phone: formInput.phone,
+      wechat: formInput.wechat
+    };
+
+    try {
+      const response = await fetch('/api/consultations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(submissionData)
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success && result.consultation) {
+          const updated = [...consultations, result.consultation];
+          setConsultations(updated);
+          localStorage.setItem('little_sun_consultations', JSON.stringify(updated));
+          setFormSuccess(true);
+          setFormInput({ subject: '', content: '', phone: '', wechat: '' });
+          setTimeout(() => setFormSuccess(false), 3000);
+          return;
+        }
+      }
+    } catch (err) {
+      console.error('Backend submission failed, falling back to local storage:', err);
+    }
+
+    // Offline Fallback flow
     const newConsultation: Consultation = {
       id: Math.random().toString(36).substring(2, 9),
       type: 'standard',
